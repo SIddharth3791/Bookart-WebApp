@@ -1,15 +1,27 @@
-var bookartApp = angular.module("bookartApp",[]);
+var bookartApp = angular.module("bookartApp",["ngRoute"]);
+bookartApp.config(function($routeProvider){
+	$routeProvider.when("/books", {
+			templateUrl: "template/booklist.html",
+			controller: "BookListCtrl"
+		})
+		.when("/kart", {
+			templateUrl: "template/kartlist.html",
+			controller: "KartListCtrl"
+		})
+	.otherwise({
+		redirectTo:"/books"
+	});
+});
 
-bookartApp.controller("HeaderCtrl", function($scope)
-{
+
+bookartApp.controller("HeaderCtrl", function($scope){
 	$scope.appDetails = {
 		title: "Bookart",
 		tagline: "We have 1 million books for you"
 	};
 });
 
-bookartApp.controller("BookListCtrl",function($scope)
-{
+bookartApp.controller("BookListCtrl",function($scope){
 	$scope.books = [
 		{
 			imgUrl: "adult.jpeg",
@@ -72,7 +84,12 @@ bookartApp.controller("BookListCtrl",function($scope)
 			details: "Wings of Fire traces the life and times of India's former president A.P.J. Abdul Kalam. It gives a glimpse of his childhood as well as his growth as India's Missile Man. Summary of the Book Wings... View More"
 		}
 	];
-	
-	
+});
+
+bookartApp.controller("KartListCtrl", function($scope){
+	$scope.kart = [];
+	$scope.buy = function(book){
+		
+	}
 });
 
