@@ -1,4 +1,4 @@
-var bookartApp = angular.module("bookartApp",["ngRoute"]);
+var bookartApp = angular.module("bookartApp",["ngRoute", "ngAnimate"]);
 
 bookartApp.config(function($routeProvider)
 {
@@ -114,12 +114,19 @@ bookartApp.controller("KartListCtrl", function($scope, kartService)
 	}
 	
 });
-bookartApp.controller("HeaderCtrl", function($scope)
-{
-	$scope.appDetails = {
-		title: "Bookart",
-		tagline: "We have 1 million books for you"
-	};
+bookartApp.controller("HeaderCtrl", function($scope, $location) {
+	$scope.appDetails = {};
+	$scope.appDetails.title = "BooKart";
+	$scope.appDetails.tagline = "We have collection of 1 Million books";
+	
+	$scope.nav = {};
+	$scope.nav.isActive = function(path) {
+		if (path === $location.path()) {
+			return true;
+		}
+		
+		return false;
+	}
 });
 
 bookartApp.controller("BookListCtrl",function($scope, bookService, kartService)
