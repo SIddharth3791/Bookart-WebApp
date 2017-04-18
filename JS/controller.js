@@ -1,32 +1,26 @@
 var bookartApp = angular.module("bookartApp",["ngRoute"]);
-bookartApp.config(function($routeProvider){
-	$routeProvider.when("/books", {
-			templateUrl: "template/booklist.html",
-			controller: "BookListCtrl"
-		})
-		.when("/kart", {
-			templateUrl: "template/kartlist.html",
-			controller: "KartListCtrl"
-		})
+
+bookartApp.config(function($routeProvider)
+{
+	$routeProvider.when("/books",{
+		templateUrl: "template/booklist.html",
+		controller: "BookListCtrl"
+	})
+	.when("/kart",{
+		templateUrl: "template/kartlist.html",
+		controller: "KartListCtrl"
+	})
 	.otherwise({
-		redirectTo:"/books"
+		redirectTo:"/book"
 	});
 });
 
-
-bookartApp.controller("HeaderCtrl", function($scope){
-	$scope.appDetails = {
-		title: "Bookart",
-		tagline: "We have 1 million books for you"
-	};
-});
-
-bookartApp.controller("BookListCtrl",function($scope){
-	$scope.books = [
+bookartApp.factory("bookService", function() {
+	var books = [
 		{
 			imgUrl: "adult.jpeg",
 			name: "Adultery",
-			price: 205,
+			price: 20.99,
 			rating: 4,
 			binding: "Paperback",
 			publisher: "Random House India",
@@ -36,7 +30,7 @@ bookartApp.controller("BookListCtrl",function($scope){
 		{
 			imgUrl: "geronimo.jpeg",
 			name: "Geronimo Stilton Spacemice#2 : You're Mine, Captain!",
-			price: 168,
+			price: 16.99,
 			rating: 5,
 			binding: "Paperback",
 			publisher: "Scholastic",
@@ -46,7 +40,7 @@ bookartApp.controller("BookListCtrl",function($scope){
 		{
 			imgUrl: "life-or-death.jpeg",
 			name: "Life or Death",
-			price: 339,
+			price: 30,
 			rating: 4,
 			binding: "Paperback",
 			publisher: "Hachette India",
@@ -56,7 +50,7 @@ bookartApp.controller("BookListCtrl",function($scope){
 		{
 			imgUrl: "playing.jpeg",
 			name: "Playing It My Way : My Autobiography",
-			price: 599,
+			price: 50,
 			rating: 5,
 			binding: "Hardcover",
 			publisher: "Hodder & Stoughton",
@@ -66,7 +60,7 @@ bookartApp.controller("BookListCtrl",function($scope){
 		{
 			imgUrl: "the-fault.jpeg",
 			name: "The Fault in Our Stars",
-			price: 227,
+			price: 49.99,
 			rating: 4.5,
 			binding: "Paperback",
 			publisher: "Penguin Books Ltd",
@@ -76,7 +70,7 @@ bookartApp.controller("BookListCtrl",function($scope){
 		{
 			imgUrl: "wings-of-fire.jpeg",
 			name: "Wings of Fire: An Autobiography",
-			price: 124,
+			price: 12.99,
 			rating: 5,
 			binding: "Paperback",
 			publisher: "Universities Press",
@@ -84,12 +78,58 @@ bookartApp.controller("BookListCtrl",function($scope){
 			details: "Wings of Fire traces the life and times of India's former president A.P.J. Abdul Kalam. It gives a glimpse of his childhood as well as his growth as India's Missile Man. Summary of the Book Wings... View More"
 		}
 	];
+	
+	return {
+		getBooks: function() {
+			return books;
+		},
+		addToKart: function(book) {
+			
+		}
+	}
 });
 
-bookartApp.controller("KartListCtrl", function($scope){
-	$scope.kart = [];
-	$scope.buy = function(book){
-		
+bookartApp.factory("kartService", function() {
+	var kart = [];
+	
+	return {
+		getKart: function() {
+			return kart;
+		},
+		addToKart: function(book) {
+			kart.push(book);
+		},
+		buy: function(book) {
+			alert("Thanks for buying: ", book.name);
+		}
 	}
+});
+
+bookartApp.controller("KartListCtrl", function($scope, kartService)
+{
+	$scope.kart = kartService.getKart();
+	
+	$scope.buy = function(book) {
+		kartService.buy(book);
+	}
+	
+});
+bookartApp.controller("HeaderCtrl", function($scope)
+{
+	$scope.appDetails = {
+		title: "Bookart",
+		tagline: "We have 1 million books for you"
+	};
+});
+
+bookartApp.controller("BookListCtrl",function($scope, bookService, kartService)
+{
+	$scope.books = bookService.getBooks();
+	
+	$scope.addToKart = function(book)
+	{
+		kartService.addToKart(book);
+	}
+	
 });
 
